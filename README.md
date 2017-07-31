@@ -1,2 +1,2 @@
-# qqgoto[http://www.qqgoto.com]
+# [qqgoto](http://www.qqgoto.com)
 php slim CRUD simple

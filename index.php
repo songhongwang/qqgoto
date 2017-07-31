@@ -1,3 +1,2 @@
 <?php 
-echo "index php";
-phpinfo();
+echo "qqgoto api";

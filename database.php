@@ -14,8 +14,8 @@ function getDB()
     $dbname = "douban";
 
     $mysql_conn_string = "mysql:host=$dbhost;dbname=$dbname";
-    $dbConnection = new PDO($mysql_conn_string, $dbuser, $dbpass);
-    $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbConnection->query("SET NAMES utf8");
-    return $dbConnection;
+    $pdo = new PDO($mysql_conn_string, $dbuser, $dbpass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->query("SET NAMES utf8");
+    return $pdo;
 }

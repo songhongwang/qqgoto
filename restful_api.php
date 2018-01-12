@@ -13,12 +13,17 @@ require 'student_manage.php';
 
 $app = new Slim\App();
 
-$app->get('/score/{id}', function(Request $request, Response $response, $args){
+$app->get('/movie/{id}', function(Request $request, Response $response, $args){
 
     StudentManage::getStudent($request, $response, $args);
 });
 
-$app->get('/score', function(Request $request, Response $response, $args){
+$app->get('/movie', function(Request $request, Response $response, $args){
+
+    StudentManage::getAllStudent($request, $response, $args);
+});
+
+$app->get('/movie/', function(Request $request, Response $response, $args){
 
     StudentManage::getAllStudent($request, $response, $args);
 });

@@ -11,6 +11,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 
 require 'database.php';
+include('movie.php');
 
 class StudentManage
 {
@@ -18,9 +19,9 @@ class StudentManage
     {
         try {
             $db = getDB();
-            $sqlStr = "SELECT * FROM students";
+            $sqlStr = "select * from movie";
             if($args['id'] > 0){
-                $sqlStr = $sqlStr . " WHERE student_id = :id";
+                $sqlStr = $sqlStr . " WHERE id = :id";
             }
 
             $sth = $db->prepare($sqlStr);
@@ -35,17 +36,22 @@ class StudentManage
 
             if ($student) {
                 $arr = array();
-                foreach ($student as $stu){
-                    array_push($arr, $stu);
+
+                foreach ($student as $movie){
+                    $m = new Movie();
+                    $m->id = $movie['id'];
+                    $m->title = $movie['title'];
+                    $m->link = $movie['link'];
+                    array_push($arr, $m);
                 }
+                 
 
-
-                $response = $response->withStatus(200)->withHeader('Content-type', 'application/json');
+                $response = $response->withStatus(200)->withHeader('Content-type', 'application/json;charset=utf-8');
                 $response->getBody()->write(json_encode(
                     [
                         'status' => 200,
                         'error' => '',
-                        'datas' => $arr
+                        'datas' =>  $arr
                     ]
                 ));
             } else {
@@ -73,6 +79,65 @@ class StudentManage
             $db = null;
         }
     }
+
+
+     static function getAllStudent(Request $request, Response $response, $args)
+    {
+        try {
+            $db = getDB();
+            $sqlStr = "select * from movie limit 30,30";
+            
+            $sth = $db->prepare($sqlStr);
+ 
+            $sth->execute();
+            $student = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($student) {
+                $arr = array();
+
+                foreach ($student as $movie){
+                    $m = new Movie();
+                    $m->id = $movie['id'];
+                    $m->title = $movie['title'];
+                    $m->link = $movie['link'];
+                    array_push($arr, $m);
+                }
+                 
+
+                $response = $response->withStatus(200)->withHeader('Content-type', 'application/json;charset=utf-8');
+                $response->getBody()->write(json_encode(
+                    [
+                        'status' => 200,
+                        'error' => '',
+                        'datas' =>  $arr
+                    ]
+                ));
+            } else {
+                $response = $response->withStatus(404)->withHeader('Content-type', 'application/json');
+                $response->getBody()->write(json_encode(
+                    [
+                        'status' => 404,
+                        'error' => 'student could not be found',
+                        'datas' => $student
+                    ]
+                ));
+            }
+            return $response;
+            $db = null;
+        } catch (PDOException $e) {
+            $response = $response->withStatus(500)->withHeader('Content-type', 'application/json');
+            $response->getBody()->write(json_encode(
+                [
+                    'status' => 500,
+                    'error' => $e->getMessage(),
+                    'datas' => ''
+                ]
+            ));
+            return $response;
+            $db = null;
+        }
+    }
+
 
     static function updateStudent(Request $request, Response $response, $args)
     {

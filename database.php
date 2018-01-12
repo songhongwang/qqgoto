@@ -10,11 +10,12 @@ function getDB()
 {
     $dbhost = "localhost:3306";
     $dbuser = "root";
-    $dbpass = "root";
-    $dbname = "school";
+    $dbpass = "123456";
+    $dbname = "douban";
 
     $mysql_conn_string = "mysql:host=$dbhost;dbname=$dbname";
     $dbConnection = new PDO($mysql_conn_string, $dbuser, $dbpass);
     $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbConnection->query("SET NAMES utf8");
     return $dbConnection;
 }

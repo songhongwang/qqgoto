@@ -18,6 +18,11 @@ $app->get('/score/{id}', function(Request $request, Response $response, $args){
     StudentManage::getStudent($request, $response, $args);
 });
 
+$app->get('/score', function(Request $request, Response $response, $args){
+
+    StudentManage::getAllStudent($request, $response, $args);
+});
+
 $app->put('/score/{id}', function(Request $request, Response $response, $args) {
     StudentManage::updateStudent($request, $response, $args);
 });

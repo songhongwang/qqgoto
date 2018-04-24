@@ -10,15 +10,15 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 
-require 'database.php';
-include('movie.php');
+require_once 'db/Database.php';
+include('model/Movie.php');
 
 class StudentManage
 {
     static function getStudent(Request $request, Response $response, $args)
     {
         try {
-            $db = getDB();
+            $db = Database::getDB();
             $sqlStr = "select * from movie";
             if($args['id'] > 0){
                 $sqlStr = $sqlStr . " WHERE id = :id";
@@ -84,7 +84,7 @@ class StudentManage
      static function getAllStudent(Request $request, Response $response, $args)
     {
         try {
-            $db = getDB();
+            $db = Database::getDB();
             $sqlStr = "select * from movie limit 30,30";
             
             $sth = $db->prepare($sqlStr);
@@ -143,7 +143,7 @@ class StudentManage
     {
         try {
             $putDatas = $request->getParsedBody();
-            $db = getDB();
+            $db = Database::getDB();
             $sth = $db->prepare("UPDATE students SET score = :score WHERE student_id = :id");
 
             $sth->bindParam(':score', $putDatas['score'], PDO::PARAM_INT);
@@ -179,7 +179,7 @@ class StudentManage
     {
         $postDatas = $request->getParsedBody();
         try {
-            $db = getDB();
+            $db = Database::getDB();
             $sth = $db->prepare("INSERT INTO students (score, first_name, last_name) VALUES (:score, :firstName, :lastName)");
             $sth->bindParam(':score', $postDatas['score'], PDO::PARAM_INT);
             $sth->bindParam(':firstName', $postDatas['firstName'], PDO::PARAM_STR);
@@ -215,7 +215,7 @@ class StudentManage
     static function deleteStudent(Request $request, Response $response, $args)
     {
         try {
-            $db = getDB();
+            $db = Database::getDB();
             $sth = $db->prepare("DELETE FROM students WHERE student_id = :id");
             $sth->bindParam(':id', $args['id'], PDO::PARAM_INT);
             $sth->execute();

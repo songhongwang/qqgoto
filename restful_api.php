@@ -5,12 +5,16 @@
  * Date: 17/7/28
  * Time: 下午4:26
  */
+// 文件保护
+define('IN_SYS', true);
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+require_once 'slim/vendor/autoload.php';
 
 require 'slim/vendor/autoload.php';
 require 'manage/IndexManage.php';
-require 'student_manage.php';
+require 'manage/StudentManage.php';
 
 $app = new Slim\App();
 
@@ -29,18 +33,16 @@ $app->get('/movie/', function(Request $request, Response $response, $args){
     StudentManage::getAllStudent($request, $response, $args);
 });
 
-$app->put('/score/{id}', function(Request $request, Response $response, $args) {
+$app->put('/movie/{id}', function(Request $request, Response $response, $args) {
     StudentManage::updateStudent($request, $response, $args);
 });
 
 
-$app->delete('/score/{id}', function (Request $request, Response $response, $args) {
+$app->delete('/movie/{id}', function (Request $request, Response $response, $args) {
     StudentManage::deleteStudent($request, $response, $args);
 });
 
-$app->post('/score', function(Request $request, Response $response, $args) {
-    printf("hello");
-
+$app->post('/movie', function(Request $request, Response $response, $args) {
    StudentManage::addStudent($request, $response, $args);
 });
 

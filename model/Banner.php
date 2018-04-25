@@ -10,5 +10,7 @@ class Banner
 {
     public $id;
     public $img;
+    public $name;
+    public $price;
     public $des;
 }

@@ -1,11 +1,16 @@
 <html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+</head>
+
 <body>
 首页轮播
-<form id="cake_form" action="/banner" method="post">
+<form id="cake_form" action="/qqgoto/banner" method="post">
     <select onchange="choiceTable(this.value)">
-        <option value ="banner">轮播图banner</option>
-        <option value ="featured">精选</option>
-        <option value="newest">最新</option>
+        <option value ="/qqgoto/banner">轮播图banner</option>
+        <option value ="/qqgoto/featured">精选</option>
+        <option value="/qqgoto/newest">最新</option>
     </select>
     <br><br>
 

@@ -10,7 +10,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 
 require 'model/Banner.php';
-require 'model/Featuredphp';
+require 'model/Featured.php';
 require 'model/Newest.php';
 require_once 'db/Database.php';
 
@@ -160,7 +160,7 @@ class IndexManage{
 
             $sth->execute();
             $newestList = $sth->fetchAll(PDO::FETCH_ASSOC);
-
+            $arr = array();
             foreach ($newestList as $item) {
                 $newest = new Newest();
                 $newest->id = $item['id'];

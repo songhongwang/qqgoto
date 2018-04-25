@@ -54,7 +54,6 @@ $app->get('/banner', function (Request $request, Response $response, $args){
 });
 $app->post('/banner', function (Request $request, Response $response, $args){
     IndexManage::postBanner($request, $response, $args);
-//    IndexManage::initTable($request, $response, $args);
 });
 // 精选
 $app->get('/featured', function (Request $request, Response $response, $args){

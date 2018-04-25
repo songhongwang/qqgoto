@@ -9,7 +9,7 @@ if(!defined('IN_SYS')) die('Access Denied!');
 class Database{
    static function getDB()
     {
-        $dbhost = "qdm21456398.my3w.com:3306";
+        $dbhost = "qdm21456398.my3w.com";
         $dbuser = "qdm21456398";
         $dbpass = "xiaoyu123";
         $dbname = "qdm21456398_db";

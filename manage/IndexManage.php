@@ -36,7 +36,10 @@ class IndexManage{
             $sth = $db->prepare($sql);
             $sth->execute();
         }catch(PDOException $e){
-            echo $e;
+            echo "init fail:";
+            if(defined('Debug')){
+                echo $e;
+            }
         }
     }
 
@@ -81,7 +84,7 @@ class IndexManage{
             ));
 
         }catch (PDOException $e){
-            echo "请重试，异常信息:";
+            echo "请重试，异常信息: getBanner()";
             if(defined('Debug')){
                 echo $e;
             }
@@ -133,7 +136,7 @@ class IndexManage{
             ));
 
         }catch (PDOException $e){
-            echo "请重试，异常信息:";
+            echo "请重试，异常信息: getFeatured()";
             if(defined('Debug')){
                 echo $e;
             }
@@ -182,7 +185,7 @@ class IndexManage{
 
         }catch (PDOException $e){
             echo "400 request forbidden";
-            if(define("Debug")){
+            if(defined("Debug")){
                 echo $e;
             }
             self::initTable();

@@ -10,7 +10,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 
 require 'model/Banner.php';
-require 'model/Recommend.php';
+require 'model/Featuredphp';
 require 'model/Newest.php';
 require_once 'db/Database.php';
 
@@ -81,7 +81,11 @@ class IndexManage{
             ));
 
         }catch (PDOException $e){
-            echo $e;
+            echo "请重试，异常信息:";
+            if(defined('Debug')){
+                echo $e;
+            }
+            self::initTable();
         }
 
         return $response;
@@ -89,53 +93,100 @@ class IndexManage{
 
     // 精选产品
     static function getFeatured(Request $request, Response $response, $args){
-        $arr = array();
 
-        for($x=0; $x< 3; $x++){
-            $item = new Recommend();
-            $item->id = $x;
-            $item->name = '产品' + strval($x);
-            $item->img = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524639198196&di=09c80077946ed508bb1c2ac6b253525c&imgtype=jpg&src=http%3A%2F%2Fimg4.imgtn.bdimg.com%2Fit%2Fu%3D2776839664%2C347860258%26fm%3D214%26gp%3D0.jpg';
-            $item->des = '好好好';
-            array_push($arr, $item);
+        try{
+            $db = Database::getDB();
+
+            $sqlStr = "select * from featured";
+            if($args['id'] > 0){
+                $sqlStr = $sqlStr . " WHERE id = :id";
+            }
+
+            $sth = $db->prepare($sqlStr);
+
+
+            if($args['id'] > 0){
+                $sth->bindParam(':id', $args['id'], PDO::PARAM_INT);
+            }
+
+            $sth->execute();
+            $featuredList = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+            $arr = array();
+            foreach ($featuredList as $item){
+                $featured = new Featured();
+                $featured->id = $item['id'];
+                $featuredList->name = $item['name'];
+                $featured->img = $item['img'];
+                $featured->price = $item['price'];
+                $featured->des = $item['des'];
+                array_push($arr, $featured);
+            }
+
+            $response = $response->withStatus(200)->withHeader('content-type', 'application/json;charset=utf-8');
+            $response->getBody()->write(json_encode(
+                [
+                    'status' => 200,
+                    'error' => '',
+                    'datas' => $arr
+                ]
+            ));
+
+        }catch (PDOException $e){
+            echo "请重试，异常信息:";
+            if(defined('Debug')){
+                echo $e;
+            }
+            self::initTable();
         }
-
-        $response = $response->withStatus(200)->withHeader('content-type', 'application/json;charset=utf-8');
-        $response->getBody()->write(json_encode(
-            [
-                'status' => 200,
-                'error' => '',
-                'datas' => $arr
-            ]
-        ));
 
     return $response;
     }
 
     // 最近新品
     static function getNewest(Request $request, Response $response, $args){
-        $arr = array();
-        for($x=0; $x<10; $x++){
-            $item = new Newest();
-            $item->id = $x;
-            $item->name = '新品' + strval($x);
-            if($x % 2 == 0){
-                $item->img = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524636521405&di=3e6bb7ce60234f970b3ceb1f0810767c&imgtype=0&src=http%3A%2F%2Fzp1.douguo.net%2Fupload%2Fdish%2F9%2F3%2F2%2F600_93112c1379981ccdb756d537ec86f6c2.jpg';
-            }else{
-                $item->img = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524636521404&di=71075b644556f604d9195594edb558b4&imgtype=0&src=http%3A%2F%2Fi5.xiachufang.com%2Fimage%2F600%2F0a22ddbae11911e4b0bce0db5512b208.jpg';
+
+        try{
+            $db = Database::getDB();
+            $sqlStr = "select * from newest";
+            if($args['id'] > 0){
+                $sqlStr = $sqlStr . " WHERE id = :id";
             }
-            $item->price = $x;
-            $item->des = "描述";
-            array_push($arr, $item);
+            $sth = $db->prepare($sqlStr);
+
+            if($args['id'] > 0){
+                $sth->bindParam(':id', $args['id'], PDO::PARAM_INT);
+            }
+
+            $sth->execute();
+            $newestList = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($newestList as $item) {
+                $newest = new Newest();
+                $newest->id = $item['id'];
+                $newest->name = $item['name'];
+                $newest->img = $item['img'];
+                $newest->price = $item['price'];
+                $newest->des = $item['des'];
+                array_push($arr, $newest);
+            }
+
+            $response = $response->withStatus(200)->withHeader('content-type', 'application/json;charset=utf-8');
+            $response->getBody()->write(json_encode(
+                [
+                    'status' => 200,
+                    'error' => '',
+                    'datas' => $arr
+                ]
+            ));
+
+        }catch (PDOException $e){
+            echo "400 request forbidden";
+            if(define("Debug")){
+                echo $e;
+            }
+            self::initTable();
         }
-        $response = $response->withStatus(200)->withHeader('content-type', 'application/json;charset=utf-8');
-        $response->getBody()->write(json_encode(
-            [
-                'status' => 200,
-                'error' => '',
-                'datas' => $arr
-            ]
-        ));
 
         return $response;
     }
@@ -163,7 +214,11 @@ class IndexManage{
             ));
 
         }catch(PDOException $e){
-            echo $e;
+            echo "请重试，异常信息:";
+            if(defined('Debug')){
+                echo $e;
+            }
+            self::initTable();
         }
 
         return $response;
@@ -192,7 +247,11 @@ class IndexManage{
             ));
 
         }catch(PDOException $e){
-            echo $e;
+            echo "请重试，异常信息:";
+            if(defined('Debug')){
+                echo $e;
+            }
+            self::initTable();
         }
 
         return $response;
@@ -220,7 +279,11 @@ class IndexManage{
             ));
 
         }catch(PDOException $e){
-            echo $e;
+            echo "请重试，异常信息:";
+            if(defined('Debug')){
+                echo $e;
+            }
+            self::initTable();
         }
 
         return $response;

@@ -7,6 +7,7 @@
  */
 // 文件保护
 define('IN_SYS', true);
+define('Debug', true);
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;

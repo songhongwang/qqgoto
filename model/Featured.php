@@ -6,7 +6,7 @@
  * Date: 18/4/23
  * Time: 下午8:46
  */
-class Recommend
+class Featured
 {
     public $id;
     public $name;

@@ -13,6 +13,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require_once 'slim/vendor/autoload.php';
 
+require 'manage/PoemManage.php';
 require 'slim/vendor/autoload.php';
 require 'manage/IndexManage.php';
 require 'manage/StudentManage.php';
@@ -71,6 +72,8 @@ $app->post('/newest', function (Request $request, Response $response, $args){
 });
 
 // 小程序api end
-
+$app->get('/randpoem', function(Request $request, Response $response, $args){
+    PoemManage::randPoem($request, $response, $args);
+});
 
 $app->run();
